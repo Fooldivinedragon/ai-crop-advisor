@@ -1,6 +1,6 @@
-# AI Crop Advisor
+# AgroGuide
 
-AI-based crop recommendation system with weather-aware yield prediction and fertilizer advisory.
+AI Powered Smart Crop Recommendation System: crop recommendation, weather-aware yield prediction and fertilizer advisory.
 Final year B.Tech project, Department of CSE, The NorthCap University, Gurugram (2026–27).
 
 A farmer enters soil N, P, K, pH, a location and a planting date. The website works out the season,

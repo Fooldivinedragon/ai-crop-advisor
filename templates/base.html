@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{% block title %}AI Crop Advisor{% endblock %}</title>
+<title>{% block title %}AgroGuide{% endblock %}</title>
 <meta name="description" content="AI-based crop recommendation, yield estimation and fertilizer advisory for Indian farmers.">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
 </head>
 <body>
 <header class="site-header">
   <nav class="wrap nav" aria-label="Main">
-    <a class="brand" href="{{ url_for('home') }}">🌾 AI Crop Advisor</a>
+    <a class="brand" href="{{ url_for('home') }}">🌾 AgroGuide</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" onclick="const l=document.getElementById('nav-links');l.classList.toggle('open');this.setAttribute('aria-expanded',l.classList.contains('open'))">☰</button>
     <ul class="nav-links" id="nav-links">
       {% set pages = [('home', 'Home'), ('how_it_works', 'How it works'), ('results', 'Results'), ('about', 'About')] %}
@@ -29,7 +29,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div>
-      <strong>AI-Based Crop Recommendation System</strong><br>
+      <strong>AgroGuide – AI Powered Smart Crop Recommendation System</strong><br>
       Final Year Project 2026–27 · Department of CSE, The NorthCap University, Gurugram
     </div>
     <img src="{{ url_for('static', filename='img/ncu_logo.png') }}" alt="The NorthCap University logo">

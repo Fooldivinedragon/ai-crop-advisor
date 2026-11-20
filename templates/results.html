@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Results – AI Crop Advisor{% endblock %}
+{% block title %}Results – AgroGuide{% endblock %}
 {% block content %}
 {% set rf = ev.models | selectattr('model', 'equalto', 'Random Forest') | first %}
 {% set of = ev.overfit %}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}AI Crop Advisor – crop, yield and fertilizer advice for farmers{% endblock %}
+{% block title %}AgroGuide – crop, yield and fertilizer advice for farmers{% endblock %}
 {% block content %}
 {% set rf = ev.models | selectattr('model', 'equalto', 'Random Forest') | first %}
 <section class="hero">

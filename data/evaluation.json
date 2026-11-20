@@ -1,0 +1,234 @@
+{
+ "rows": 2300,
+ "crops": 23,
+ "models": [
+  {
+   "model": "Logistic Regression",
+   "accuracy": 0.9739130434782609,
+   "precision": 0.9751512199082532,
+   "recall": 0.9739130434782608,
+   "f1": 0.9736612418925306,
+   "cv_mean": 0.972608695652174,
+   "cv_std": 0.0017391304347825986,
+   "train_s": 0.08707499504089355,
+   "pred_ms": 0.0012817590133003566
+  },
+  {
+   "model": "Decision Tree",
+   "accuracy": 0.9847826086956522,
+   "precision": 0.9853645972639108,
+   "recall": 0.9847826086956522,
+   "f1": 0.9848181306516964,
+   "cv_mean": 0.9865217391304346,
+   "cv_std": 0.005395510280865588,
+   "train_s": 0.01400446891784668,
+   "pred_ms": 0.0
+  },
+  {
+   "model": "K-Nearest Neighbours",
+   "accuracy": 0.9826086956521739,
+   "precision": 0.9831153971886237,
+   "recall": 0.9826086956521738,
+   "f1": 0.9824861219039932,
+   "cv_mean": 0.981304347826087,
+   "cv_std": 0.009182048731279526,
+   "train_s": 0.0040051937103271484,
+   "pred_ms": 0.016810064730436905
+  },
+  {
+   "model": "Support Vector Machine",
+   "accuracy": 0.9891304347826086,
+   "precision": 0.9898362507058159,
+   "recall": 0.9891304347826085,
+   "f1": 0.989115459339269,
+   "cv_mean": 0.9873913043478261,
+   "cv_std": 0.0031949866210215605,
+   "train_s": 0.16845130920410156,
+   "pred_ms": 0.04348858543064284
+  },
+  {
+   "model": "Random Forest",
+   "accuracy": 0.9934782608695653,
+   "precision": 0.9937888198757764,
+   "recall": 0.9934782608695651,
+   "f1": 0.9934741822334611,
+   "cv_mean": 0.9956521739130435,
+   "cv_std": 0.0023814024239354912,
+   "train_s": 0.27434706687927246,
+   "pred_ms": 0.105484153913415
+  }
+ ],
+ "overfit": {
+  "train_acc": 1.0,
+  "test_acc": 0.9934782608695653,
+  "curve": [
+   {
+    "n": 184,
+    "train": 1.0,
+    "val": 0.9721739130434782,
+    "val_std": 0.01120356411019575
+   },
+   {
+    "n": 460,
+    "train": 1.0,
+    "val": 0.9895652173913042,
+    "val_std": 0.0021299910806810663
+   },
+   {
+    "n": 920,
+    "train": 1.0,
+    "val": 0.992608695652174,
+    "val_std": 0.0017391304347825986
+   },
+   {
+    "n": 1380,
+    "train": 1.0,
+    "val": 0.9952173913043477,
+    "val_std": 0.0025351964760196815
+   },
+   {
+    "n": 1840,
+    "train": 1.0,
+    "val": 0.9960869565217392,
+    "val_std": 0.0025351964760196815
+   }
+  ]
+ },
+ "feature_importance": {
+  "N": 0.1062,
+  "P": 0.1519,
+  "K": 0.1693,
+  "temperature": 0.0834,
+  "humidity": 0.2128,
+  "ph": 0.0549,
+  "rainfall": 0.2215
+ },
+ "cases": [
+  {
+   "district": "Ludhiana",
+   "date": "2026-11-15",
+   "season": "Rabi",
+   "crops": [
+    {
+     "crop": "wheat",
+     "prob": 1.0,
+     "q_acre": 15.1,
+     "unit": "quintal/acre"
+    }
+   ]
+  },
+  {
+   "district": "Karnal",
+   "date": "2026-11-20",
+   "season": "Rabi",
+   "crops": [
+    {
+     "crop": "wheat",
+     "prob": 1.0,
+     "q_acre": 15.3,
+     "unit": "quintal/acre"
+    }
+   ]
+  },
+  {
+   "district": "Jabalpur",
+   "date": "2026-10-25",
+   "season": "Rabi",
+   "crops": [
+    {
+     "crop": "wheat",
+     "prob": 0.4,
+     "q_acre": 12.3,
+     "unit": "quintal/acre"
+    },
+    {
+     "crop": "chickpea",
+     "prob": 0.225,
+     "q_acre": 4.8,
+     "unit": "quintal/acre"
+    },
+    {
+     "crop": "lentil",
+     "prob": 0.204,
+     "q_acre": 4.4,
+     "unit": "quintal/acre"
+    }
+   ]
+  },
+  {
+   "district": "Cuttack",
+   "date": "2026-07-01",
+   "season": "Kharif",
+   "crops": [
+    {
+     "crop": "rice",
+     "prob": 0.51,
+     "q_acre": 15.9,
+     "unit": "quintal/acre (paddy)"
+    },
+    {
+     "crop": "jute",
+     "prob": 0.204,
+     "q_acre": 10.4,
+     "unit": "quintal/acre (fibre)"
+    },
+    {
+     "crop": "banana",
+     "prob": 0.14,
+     "q_acre": 116.4,
+     "unit": "quintal/acre"
+    }
+   ]
+  },
+  {
+   "district": "Varanasi",
+   "date": "2026-03-01",
+   "season": "Zaid",
+   "crops": [
+    {
+     "crop": "watermelon",
+     "prob": 0.315,
+     "q_acre": 97.3,
+     "unit": "quintal/acre"
+    },
+    {
+     "crop": "muskmelon",
+     "prob": 0.075,
+     "q_acre": 70.3,
+     "unit": "quintal/acre"
+    },
+    {
+     "crop": "mango",
+     "prob": 0.06,
+     "q_acre": 27.9,
+     "unit": "quintal/acre"
+    }
+   ]
+  },
+  {
+   "district": "Srinagar",
+   "date": "2026-07-01",
+   "season": "Kharif",
+   "crops": [
+    {
+     "crop": "grapes",
+     "prob": 0.78,
+     "q_acre": 65.6,
+     "unit": "quintal/acre"
+    },
+    {
+     "crop": "apple",
+     "prob": 0.015,
+     "q_acre": 29.0,
+     "unit": "quintal/acre"
+    },
+    {
+     "crop": "mango",
+     "prob": 0.06,
+     "q_acre": 4.4,
+     "unit": "quintal/acre"
+    }
+   ]
+  }
+ ]
+}

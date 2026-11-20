@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}AI Crop Advisor – crop, yield and fertilizer advice for farmers{% endblock %}
+{% block content %}
+{% set rf = ev.models | selectattr('model', 'equalto', 'Random Forest') | first %}
+<section class="hero">
+  <div>
+    <h1>Know what to grow, how much you'll harvest, and how to feed your soil</h1>
+    <p>Enter your soil test, village and sowing date. The advisor works out the season and local weather,
+      recommends the best crops, estimates the yield and prepares a fertilizer plan, then explains it all in your own language.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="{{ url_for('advisor') }}">Try the advisor</a>
+      <a class="btn btn-ghost" href="{{ url_for('how_it_works') }}">See how it works</a>
+    </div>
+  </div>
+  <img class="shot" src="{{ url_for('static', filename='img/ui_results.jpg') }}"
+       alt="Advisor results showing Rabi season weather and wheat as the top recommended crop">
+</section>
+
+<section class="block">
+  <div class="stats">
+    <div class="stat-big"><b>6</b><span>inputs from the farmer – nothing more</span></div>
+    <div class="stat-big"><b>{{ ev.crops }}</b><span>crops, including wheat</span></div>
+    <div class="stat-big"><b>{{ '%.2f' % (rf.accuracy * 100) }}%</b><span>crop model test accuracy</span></div>
+    <div class="stat-big"><b>9</b><span>Indian languages for explanations</span></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>The problem</h2>
+  <p class="lead">Most crop recommendation tools ask the farmer for temperature, humidity and rainfall – numbers nobody knows
+    before the season starts – and then reply with a single crop name in English. A farmer needs more than that.</p>
+  <div class="grid-3">
+    <div class="card"><div class="icon">🌦️</div><h3>Weather nobody knows</h3><p class="muted">Next season's humidity and rainfall can't be typed into a form.</p></div>
+    <div class="card"><div class="icon">🏷️</div><h3>Just a crop name</h3><p class="muted">No harvest estimate, no soil check, no fertilizer plan.</p></div>
+    <div class="card"><div class="icon">🔤</div><h3>Technical English</h3><p class="muted">Doses in kg/ha of N-P₂O₅-K₂O instead of bags per acre in Hindi.</p></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>How it works</h2>
+  <p class="lead">The farmer gives only what they know. Everything else is worked out automatically.</p>
+  <div class="steps">
+    <div class="step"><h3>Enter soil and place</h3><p>N, P, K and pH from the Soil Health Card, a district or GPS, and the sowing date.</p></div>
+    <div class="step"><h3>Season and weather</h3><p>Kharif, Rabi or Zaid from the date; five years of local weather from NASA POWER.</p></div>
+    <div class="step"><h3>Best crops</h3><p>A Random Forest model ranks 23 crops, filtered by season and checked against the local climate.</p></div>
+    <div class="step"><h3>Yield and fertilizer</h3><p>Expected harvest in quintals per acre, soil status, and DAP, urea and MOP with dates.</p></div>
+    <div class="step"><h3>Simple explanation</h3><p>An AI model explains the whole report in Hindi, Punjabi, Tamil and six more languages.</p></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>What the farmer gets</h2>
+  <div class="grid-2">
+    <figure class="card figure-card">
+      <img src="{{ url_for('static', filename='img/ui_fertilizer.jpg') }}" alt="Soil status table and fertilizer plan with application dates">
+      <figcaption>Soil status and a fertilizer plan in bags per acre, with dates</figcaption>
+    </figure>
+    <figure class="card figure-card">
+      <img src="{{ url_for('static', filename='img/ui_explanation_hi.jpg') }}" alt="Explanation of the report written in Hindi">
+      <figcaption>The whole report explained in Hindi</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block">
+  <div class="cta-band">
+    <div>
+      <h2>Try it with your own soil test</h2>
+      <p>Takes about a minute. Works on a phone.</p>
+    </div>
+    <a class="btn" href="{{ url_for('advisor') }}">Open the advisor</a>
+  </div>
+</section>
+{% endblock %}

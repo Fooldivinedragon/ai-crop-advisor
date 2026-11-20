@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}About – AI Crop Advisor{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>About the project</h1>
+  <p>AI-Based Crop Recommendation System with Weather-Aware Yield Prediction and Fertilizer Advisory – a final year B.Tech project at The NorthCap University.</p>
+</div>
+
+<section class="block">
+  <h2>Team</h2>
+  <div class="grid-3">
+    <div class="card person">
+      <div class="avatar">S1</div>
+      <h3>[Student 1 Name]</h3>
+      <p class="muted">[Roll No.]</p>
+      <p>Data and ML model, wheat data, weather module, yield estimator</p>
+    </div>
+    <div class="card person">
+      <div class="avatar">S2</div>
+      <h3>[Student 2 Name]</h3>
+      <p class="muted">[Roll No.]</p>
+      <p>Fertilizer engine, web application, AI explanation module</p>
+    </div>
+    <div class="card person">
+      <div class="avatar">🎓</div>
+      <h3>[Supervisor Name]</h3>
+      <p class="muted">[Designation]</p>
+      <p>Project supervisor, Department of CSE</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Objectives</h2>
+  <div class="card">
+    <ul>
+      <li>Recommend suitable crops using only soil test values, location and planting date</li>
+      <li>Fetch local historical weather automatically instead of asking the farmer for it</li>
+      <li>Respect the cropping season and the local climate when ranking crops</li>
+      <li>Estimate yield in quintals per acre with a range from past seasons</li>
+      <li>Give a fertilizer plan in products, bags and dates</li>
+      <li>Explain the whole report simply, in nine Indian languages</li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Built with</h2>
+  <div class="card">
+    <span class="tag">Python 3.10</span><span class="tag">scikit-learn</span><span class="tag">pandas</span><span class="tag">Flask</span>
+    <span class="tag">HTML / CSS / JavaScript</span><span class="tag">NASA POWER API</span><span class="tag">Open-Meteo Geocoding</span>
+    <span class="tag">Google Gemini API</span><span class="tag">Anthropic Claude API</span><span class="tag">Matplotlib</span>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Limitations</h2>
+  <div class="card">
+    <ul>
+      <li>Yield comes from a rule-based model built on typical crop requirements, not from measured farm yields.</li>
+      <li>The soil values of the 100 wheat training rows were generated from typical ranges; their weather is real.</li>
+      <li>Soil ratings compare values with each crop's needs in the dataset, not with laboratory soil-test standards.</li>
+      <li>Fertilizer doses are general national (ICAR) figures, not state-specific recommendations.</li>
+      <li>The public dataset covers temperate regions such as Kashmir poorly.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="block">
+  <div class="note">
+    <strong>Disclaimer:</strong> this is a student decision-support prototype. Recommendations and doses are estimates –
+    always confirm them with your local Krishi Vigyan Kendra or agriculture officer before acting on them.
+  </div>
+</section>
+{% endblock %}

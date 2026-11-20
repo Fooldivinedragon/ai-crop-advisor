@@ -1,0 +1,208 @@
+{
+  "features": [
+    "N",
+    "P",
+    "K",
+    "temperature",
+    "humidity",
+    "ph",
+    "rainfall"
+  ],
+  "classes": [
+    "apple",
+    "banana",
+    "blackgram",
+    "chickpea",
+    "coconut",
+    "coffee",
+    "cotton",
+    "grapes",
+    "jute",
+    "kidneybeans",
+    "lentil",
+    "maize",
+    "mango",
+    "mothbeans",
+    "mungbean",
+    "muskmelon",
+    "orange",
+    "papaya",
+    "pigeonpeas",
+    "pomegranate",
+    "rice",
+    "watermelon",
+    "wheat"
+  ],
+  "best_model_name": "random_forest",
+  "best_model_params": {
+    "n_estimators": 200,
+    "min_samples_split": 5,
+    "min_samples_leaf": 1,
+    "max_features": "log2",
+    "max_depth": null
+  },
+  "test_accuracy": 0.9934782608695653,
+  "soil_profiles": {
+    "apple": {
+      "N": 24.0,
+      "P": 136.5,
+      "K": 200.0,
+      "ph_low": 5.56,
+      "ph_high": 6.4
+    },
+    "banana": {
+      "N": 100.5,
+      "P": 81.0,
+      "K": 50.0,
+      "ph_low": 5.57,
+      "ph_high": 6.44
+    },
+    "blackgram": {
+      "N": 41.0,
+      "P": 67.0,
+      "K": 19.0,
+      "ph_low": 6.54,
+      "ph_high": 7.71
+    },
+    "chickpea": {
+      "N": 39.0,
+      "P": 68.0,
+      "K": 79.0,
+      "ph_low": 6.18,
+      "ph_high": 8.74
+    },
+    "coconut": {
+      "N": 24.0,
+      "P": 15.5,
+      "K": 31.0,
+      "ph_low": 5.55,
+      "ph_high": 6.42
+    },
+    "coffee": {
+      "N": 103.0,
+      "P": 29.0,
+      "K": 30.0,
+      "ph_low": 6.08,
+      "ph_high": 7.46
+    },
+    "cotton": {
+      "N": 117.0,
+      "P": 46.0,
+      "K": 19.0,
+      "ph_low": 6.0,
+      "ph_high": 7.95
+    },
+    "grapes": {
+      "N": 24.0,
+      "P": 133.0,
+      "K": 201.0,
+      "ph_low": 5.56,
+      "ph_high": 6.48
+    },
+    "jute": {
+      "N": 78.0,
+      "P": 46.0,
+      "K": 40.0,
+      "ph_low": 6.07,
+      "ph_high": 7.38
+    },
+    "kidneybeans": {
+      "N": 22.0,
+      "P": 67.0,
+      "K": 20.0,
+      "ph_low": 5.52,
+      "ph_high": 5.97
+    },
+    "lentil": {
+      "N": 16.5,
+      "P": 68.0,
+      "K": 19.0,
+      "ph_low": 6.06,
+      "ph_high": 7.73
+    },
+    "maize": {
+      "N": 76.0,
+      "P": 48.5,
+      "K": 20.0,
+      "ph_low": 5.59,
+      "ph_high": 6.87
+    },
+    "mango": {
+      "N": 21.0,
+      "P": 27.5,
+      "K": 30.0,
+      "ph_low": 4.67,
+      "ph_high": 6.82
+    },
+    "mothbeans": {
+      "N": 22.0,
+      "P": 48.5,
+      "K": 20.0,
+      "ph_low": 3.69,
+      "ph_high": 9.41
+    },
+    "mungbean": {
+      "N": 22.0,
+      "P": 47.0,
+      "K": 20.0,
+      "ph_low": 6.27,
+      "ph_high": 7.17
+    },
+    "muskmelon": {
+      "N": 100.0,
+      "P": 18.0,
+      "K": 50.0,
+      "ph_low": 6.04,
+      "ph_high": 6.74
+    },
+    "orange": {
+      "N": 19.0,
+      "P": 16.0,
+      "K": 10.0,
+      "ph_low": 6.12,
+      "ph_high": 7.86
+    },
+    "papaya": {
+      "N": 49.0,
+      "P": 60.0,
+      "K": 50.0,
+      "ph_low": 6.52,
+      "ph_high": 6.99
+    },
+    "pigeonpeas": {
+      "N": 20.0,
+      "P": 69.5,
+      "K": 20.0,
+      "ph_low": 4.67,
+      "ph_high": 7.17
+    },
+    "pomegranate": {
+      "N": 18.0,
+      "P": 20.0,
+      "K": 40.0,
+      "ph_low": 5.68,
+      "ph_high": 7.13
+    },
+    "rice": {
+      "N": 80.0,
+      "P": 47.0,
+      "K": 40.0,
+      "ph_low": 5.11,
+      "ph_high": 7.63
+    },
+    "watermelon": {
+      "N": 99.0,
+      "P": 17.5,
+      "K": 50.5,
+      "ph_low": 6.07,
+      "ph_high": 6.93
+    },
+    "wheat": {
+      "N": 101.0,
+      "P": 51.0,
+      "K": 40.5,
+      "ph_low": 6.11,
+      "ph_high": 8.09
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}How it works – AI Crop Advisor{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>How it works</h1>
+  <p>From six farmer inputs to a complete crop, yield and fertilizer plan, step by step.</p>
+</div>
+
+<section class="block">
+  <h2>The pipeline</h2>
+  <div class="card">
+    <ol class="timeline">
+      <li><span class="num">1</span><div><h3>Farmer input</h3><p>Soil nitrogen, phosphorus, potassium and pH, a district name or GPS coordinates, and the planting date.</p></div></li>
+      <li><span class="num">2</span><div><h3>Location</h3><p>GPS is used directly. District names are matched against a table of 50 districts, or looked up with the Open-Meteo geocoding API.</p></div></li>
+      <li><span class="num">3</span><div><h3>Season</h3><p>June–September is Kharif, October–January is Rabi, February–May is Zaid.</p></div></li>
+      <li><span class="num">4</span><div><h3>Historical weather</h3><p>Daily temperature, rainfall, humidity and solar radiation are downloaded from NASA POWER. The same calendar window is taken from each of the last five years and averaged, giving the typical weather of the season.</p></div></li>
+      <li><span class="num">5</span><div><h3>Crop recommendation</h3><p>A Random Forest model, trained on {{ ev.rows }} samples of {{ ev.crops }} crops, gives a probability for every crop. In-season crops come first.</p></div></li>
+      <li><span class="num">6</span><div><h3>Climate check and ranking</h3><p>Each candidate gets its own weather window matching its growing period. The final score is model probability × climate suitability, and up to three crops are shown.</p></div></li>
+      <li><span class="num">7</span><div><h3>Yield estimate</h3><p>Expected harvest for each of the five past seasons, giving an average and a good-year to bad-year range in quintals per acre.</p></div></li>
+      <li><span class="num">8</span><div><h3>Fertilizer plan</h3><p>Soil status adjusts the standard dose, which is converted into DAP, urea and MOP bags with application dates.</p></div></li>
+      <li><span class="num">9</span><div><h3>Simple explanation</h3><p>The finished report is sent to an AI language model, which explains it in the farmer's language using only the computed numbers.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="block">
+  <h2>System architecture</h2>
+  <p class="lead">A Flask web server calls seven modules, each with a single job. Two external services supply weather and location data, and an LLM writes the explanation.</p>
+  <figure class="card figure-card">
+    <img src="{{ url_for('static', filename='img/architecture.png') }}" alt="Architecture diagram: browser, Flask server, seven processing modules and external services">
+    <figcaption>Three-layer architecture of the system</figcaption>
+  </figure>
+</section>
+
+<section class="block">
+  <h2>Yield estimation</h2>
+  <p class="lead">The typical yield of the crop is reduced by seven stress factors, each between 0 and 1, so every loss can be explained.</p>
+  <div class="card">
+    <p class="formula">Y = Y<sub>base</sub> × f<sub>T</sub> × f<sub>E</sub> × f<sub>W</sub> × f<sub>S</sub> × f<sub>H</sub> × f<sub>N</sub> × f<sub>pH</sub></p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Factor</th><th>What it measures</th></tr>
+        <tr><td>f<sub>T</sub> temperature</td><td>Season's mean temperature against the crop's optimal range</td></tr>
+        <tr><td>f<sub>E</sub> extremes</td><td>Cold or heat spells beyond what the crop survives</td></tr>
+        <tr><td>f<sub>W</sub> water</td><td>Rainfall against the crop's need (irrigation fills the gap if available)</td></tr>
+        <tr><td>f<sub>S</sub> sunlight</td><td>Average daily solar radiation</td></tr>
+        <tr><td>f<sub>H</sub> humidity</td><td>Disease risk in very humid seasons</td></tr>
+        <tr><td>f<sub>N</sub> soil nutrients</td><td>The most deficient of N, P and K (law of the minimum)</td></tr>
+        <tr><td>f<sub>pH</sub> soil pH</td><td>Distance from the crop's preferred pH range</td></tr>
+      </table>
+    </div>
+    <p class="muted">Yield in t/ha is converted to quintals per acre (1 t/ha ≈ 4.05 q/acre).</p>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Fertilizer advice</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Soil status adjusts the dose</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Soil status</th><th>Soil value ÷ crop need</th><th>Dose</th></tr>
+          <tr><td><span class="badge s-Low">Low</span></td><td>below 0.6</td><td>Standard + 25%</td></tr>
+          <tr><td><span class="badge s-Medium">Medium</span></td><td>0.6 – 1.0</td><td>Standard</td></tr>
+          <tr><td><span class="badge s-Sufficient">Sufficient</span></td><td>1.0 – 1.5</td><td>Standard − 25%</td></tr>
+          <tr><td><span class="badge s-High">High</span></td><td>above 1.5</td><td>Standard − 50%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Nutrients become products</h3>
+      <p>DAP = P₂O₅ ÷ 0.46<br>Urea = (N − 0.18 × DAP) ÷ 0.46<br>MOP = K₂O ÷ 0.60</p>
+      <p class="muted">Quantities are shown per acre and as 50 kg bags. The basal dose at sowing carries all DAP and MOP; the rest of the nitrogen is split into urea top dressings at crop stages, with dates.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Data sources</h2>
+  <div class="grid-3">
+    <div class="card"><div class="icon">📊</div><h3>Crop data</h3><p class="muted">Kaggle Crop Recommendation dataset (2,200 rows, 22 crops) plus 100 wheat rows built from real NASA weather of 18 wheat districts.</p></div>
+    <div class="card"><div class="icon">🛰️</div><h3>Weather</h3><p class="muted">NASA POWER daily data: temperature, rainfall, humidity and solar radiation for any location.</p></div>
+    <div class="card"><div class="icon">💬</div><h3>Explanations</h3><p class="muted">Claude, or the free tier of Google Gemini, restricted by the prompt to the numbers in the report.</p></div>
+  </div>
+</section>
+{% endblock %}

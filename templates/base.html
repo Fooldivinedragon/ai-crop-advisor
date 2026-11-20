@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}AI Crop Advisor{% endblock %}</title>
+<meta name="description" content="AI-based crop recommendation, yield estimation and fertilizer advisory for Indian farmers.">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+</head>
+<body>
+<header class="site-header">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="brand" href="{{ url_for('home') }}">🌾 AI Crop Advisor</a>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" onclick="const l=document.getElementById('nav-links');l.classList.toggle('open');this.setAttribute('aria-expanded',l.classList.contains('open'))">☰</button>
+    <ul class="nav-links" id="nav-links">
+      {% set pages = [('home', 'Home'), ('how_it_works', 'How it works'), ('results', 'Results'), ('about', 'About')] %}
+      {% for endpoint, label in pages %}
+      <li><a href="{{ url_for(endpoint) }}" class="{{ 'active' if request.endpoint == endpoint }}">{{ label }}</a></li>
+      {% endfor %}
+      <li><a href="{{ url_for('advisor') }}" class="cta {{ 'active' if request.endpoint == 'advisor' }}">Try the advisor</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="wrap">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <strong>AI-Based Crop Recommendation System</strong><br>
+      Final Year Project 2026–27 · Department of CSE, The NorthCap University, Gurugram
+    </div>
+    <img src="{{ url_for('static', filename='img/ncu_logo.png') }}" alt="The NorthCap University logo">
+  </div>
+</footer>
+{% block scripts %}{% endblock %}
+</body>
+</html>

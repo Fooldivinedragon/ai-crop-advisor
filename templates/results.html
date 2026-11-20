@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Results – AI Crop Advisor{% endblock %}
+{% block content %}
+{% set rf = ev.models | selectattr('model', 'equalto', 'Random Forest') | first %}
+{% set of = ev.overfit %}
+<div class="page-head">
+  <h1>Results</h1>
+  <p>How accurate the crop model is, whether it overfits, and what the system recommends in different regions and seasons.</p>
+</div>
+
+<section class="block">
+  <div class="stats">
+    <div class="stat-big"><b>{{ '%.2f' % (rf.accuracy * 100) }}%</b><span>test accuracy (460 unseen samples)</span></div>
+    <div class="stat-big"><b>{{ '%.2f' % (rf.cv_mean * 100) }}%</b><span>5-fold cross-validation</span></div>
+    <div class="stat-big"><b>{{ '%.2f' % (rf.f1 * 100) }}%</b><span>macro F1-score</span></div>
+    <div class="stat-big"><b>15 / 15</b><span>functional tests passed</span></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Comparison of classifiers</h2>
+  <p class="lead">Five models were trained on the same 80/20 split of {{ ev.rows }} samples. Random Forest was best on every metric.</p>
+  <div class="grid-2">
+    <div class="card table-wrap">
+      <table>
+        <tr><th>Model</th><th>Accuracy</th><th>F1</th><th>5-fold CV</th></tr>
+        {% for m in ev.models %}
+        <tr class="{{ 'best' if m.model == 'Random Forest' }}">
+          <td>{{ m.model }}</td><td>{{ '%.2f' % (m.accuracy * 100) }}%</td><td>{{ '%.2f' % (m.f1 * 100) }}%</td>
+          <td>{{ '%.2f' % (m.cv_mean * 100) }}% ± {{ '%.2f' % (m.cv_std * 100) }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <figure class="card figure-card">
+      <img src="{{ url_for('static', filename='img/model_comparison.png') }}" alt="Bar chart of test and cross-validation accuracy for five classifiers">
+      <figcaption>Test and cross-validation accuracy</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Is it overfitting?</h2>
+  <p class="lead">No. Training accuracy is {{ '%.0f' % (of.train_acc * 100) }}% and test accuracy {{ '%.2f' % (of.test_acc * 100) }}% – a gap of only
+    {{ '%.2f' % ((of.train_acc - of.test_acc) * 100) }} points. Validation accuracy rises with more data and levels off close to the training score.</p>
+  <div class="grid-2">
+    <figure class="card figure-card">
+      <img src="{{ url_for('static', filename='img/learning_curve.png') }}" alt="Learning curve: training accuracy 100%, validation accuracy rising from 97% to 99.6%">
+      <figcaption>Learning curve of the Random Forest model</figcaption>
+    </figure>
+    <div class="card">
+      <h3>Why the score is so high</h3>
+      <p>Crops in the public dataset sit in fairly narrow, well-separated ranges, and the wheat soil values were generated from typical ranges. The model fits this data very well, but on real farms, where soil and weather vary more, accuracy is expected to be lower.</p>
+      <p class="muted">That is why the system does not rely on the model alone: season rules and a climate suitability check are applied before any crop is shown.</p>
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Errors and important features</h2>
+  <div class="grid-2">
+    <figure class="card figure-card">
+      <img src="{{ url_for('static', filename='img/confusion_matrix.png') }}" alt="Confusion matrix with nearly all predictions on the diagonal">
+      <figcaption>Confusion matrix: the few errors are between similar crops, such as rice and jute</figcaption>
+    </figure>
+    <figure class="card figure-card">
+      <img src="{{ url_for('static', filename='img/feature_importance.png') }}" alt="Feature importance: rainfall and humidity highest">
+      <figcaption>Rainfall and humidity matter most – exactly the values farmers can't provide, so they come from NASA POWER</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Recommendations across India</h2>
+  <p class="lead">The complete system tested with different regions and seasons.</p>
+  <div class="card table-wrap">
+    <table>
+      <tr><th>Location</th><th>Planting date</th><th>Season</th><th>Recommended crops (model confidence)</th><th>Expected yield of first crop</th></tr>
+      {% for c in ev.cases %}
+      <tr>
+        <td>{{ c.district }}</td><td>{{ c.date }}</td><td>{{ c.season }}</td>
+        <td>{% for x in c.crops %}{{ x.crop }} ({{ '%.0f' % (x.prob * 100) }}%){{ ', ' if not loop.last }}{% endfor %}</td>
+        <td>{{ c.crops[0].q_acre }} {{ c.crops[0].unit }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <p class="muted">Response time: 0.1–2.3 s when the location's weather is cached, about 8 s for a new location. AI explanations take about 10–30 s.</p>
+</section>
+{% endblock %}

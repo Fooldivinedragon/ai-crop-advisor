@@ -1,6 +1,16 @@
 const $ = (id) => document.getElementById(id);
 const fmt = (n, d = 1) => Number(n).toLocaleString(undefined, { maximumFractionDigits: d });
 let data = null;
+
+// The server may briefly answer with an HTML error page (for example while
+// it restarts); turn that into a readable message instead of a JSON error
+async function readJson(res) {
+  try {
+    return await res.json();
+  } catch {
+    throw new Error("The server is busy or restarting – please try again in a few seconds.");
+  }
+}
 let selected = 0;
 
 $("explain").addEventListener("click", async () => {
@@ -13,7 +23,7 @@ $("explain").addEventListener("click", async () => {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ result: data, crop_index: selected, language: $("language").value }),
     });
-    const json = await res.json();
+    const json = await readJson(res);
     if (!res.ok) throw new Error(json.error || "Request failed");
     const source = json.offline
       ? "Summary written by the app (AI service unavailable, offline mode)"
@@ -56,7 +66,7 @@ $("form").addEventListener("submit", async (e) => {
     const res = await fetch("/api/predict", {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
     });
-    const json = await res.json();
+    const json = await readJson(res);
     if (!res.ok) throw new Error(json.error || "Request failed");
     data = json;
     render();

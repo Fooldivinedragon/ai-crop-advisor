@@ -1,4 +1,4 @@
-# AI-generated: this file was written with the help of an AI assistant (Claude by Anthropic), because web development is outside our AIML specialisation.
+# This file was written with the help of an AI assistant.
 # Render Blueprint: free web service for the AI Crop Advisor website.
 # The model is retrained during the build so it always matches the
 # scikit-learn version installed on the server.

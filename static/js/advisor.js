@@ -1,4 +1,4 @@
-// AI-generated: this file was written with the help of an AI assistant (Claude by Anthropic), because web development is outside our AIML specialisation.
+// This file was written with the help of an AI assistant.
 
 const $ = (id) => document.getElementById(id);
 const fmt = (n, d = 1) => Number(n).toLocaleString(undefined, { maximumFractionDigits: d });

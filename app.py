@@ -116,7 +116,7 @@ def explain_result():
         return jsonify({"error": str(exc)}), 400
     except ExplainError as exc:
         return jsonify({"error": str(exc)}), 503
-    return jsonify({"explanation": out["text"], "provider": out["provider"]})
+    return jsonify({"explanation": out["text"], "provider": out["provider"], "offline": out["offline"]})
 
 
 if __name__ == "__main__":

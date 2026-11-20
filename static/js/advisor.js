@@ -15,7 +15,10 @@ $("explain").addEventListener("click", async () => {
     });
     const json = await res.json();
     if (!res.ok) throw new Error(json.error || "Request failed");
-    $("explanation").textContent = `${json.explanation}\n\n— Explained by AI (${json.provider}). Check doses with your local agriculture officer.`;
+    const source = json.offline
+      ? "Summary written by the app (AI service unavailable, offline mode)"
+      : `Explained by AI (${json.provider})`;
+    $("explanation").textContent = `${json.explanation}\n\n— ${source}. Check doses with your local agriculture officer.`;
     $("explanation").classList.remove("hidden");
   } catch (err) {
     $("explain-error").textContent = err.message;
@@ -25,6 +28,14 @@ $("explain").addEventListener("click", async () => {
     $("explain").textContent = "Explain my report";
   }
 });
+
+document.querySelectorAll(".demo").forEach((b) => b.addEventListener("click", () => {
+  const d = b.dataset;
+  $("N").value = d.n; $("P").value = d.p; $("K").value = d.k; $("ph").value = d.ph;
+  $("district").value = d.district; $("lat").value = ""; $("lon").value = "";
+  $("planting_date").value = d.date; $("irrigated").checked = true;
+  $("form").requestSubmit();
+}));
 
 $("gps").addEventListener("click", () => {
   if (!navigator.geolocation) return showError("GPS not supported in this browser");

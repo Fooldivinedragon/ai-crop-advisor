@@ -16,6 +16,7 @@ Claude is used when its key is set, otherwise Gemini. Set LLM_PROVIDER to
 """
 
 import json
+import logging
 import os
 import time
 
@@ -24,12 +25,17 @@ from google import genai
 from google.genai import errors as genai_errors
 from google.genai import types as genai_types
 
+from offline_explain import offline_explanation
+
 MODEL = "claude-opus-5-5"
 # gemini-3.6-flash: good Hindi in ~15 s on the free tier (3.8-flash took 40+ s)
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite"
 GEMINI_TIMEOUT_MS = 40_000
+GEMINI_BUDGET_S = 50
 PROVIDER_NAMES = {"claude": "Claude", "gemini": "Gemini"}
+
+log = logging.getLogger(__name__)
 
 LANGUAGES = {
     "en": "English",
@@ -123,7 +129,8 @@ def _compact(result: dict, crop_index: int) -> dict:
 
 
 def explain(result: dict, crop_index: int = 0, language: str = "en") -> dict:
-    """Returns {"text": explanation, "provider": "Claude" | "Gemini"}."""
+    """Returns {"text", "provider": "Claude" | "Gemini" | "offline", "offline": bool}.
+    Falls back to the built-in summary when no AI service can answer."""
     if language not in LANGUAGES:
         raise ExplainRequestError(f"Unsupported language '{language}'")
     if not 0 <= crop_index < len(result.get("top_crops", [])):
@@ -132,9 +139,15 @@ def explain(result: dict, crop_index: int = 0, language: str = "en") -> dict:
     report = json.dumps(_compact(result, crop_index), ensure_ascii=False, indent=1)
     prompt = f"Explain this whole crop advisory report to the farmer in {LANGUAGES[language]}.\n\n<report>\n{report}\n</report>"
 
-    provider = _pick_provider()
-    text = _ask_claude(prompt) if provider == "claude" else _ask_gemini(prompt)
-    return {"text": text, "provider": PROVIDER_NAMES[provider]}
+    try:
+        provider = _pick_provider()
+        text = _ask_claude(prompt) if provider == "claude" else _ask_gemini(prompt)
+    except ExplainError as exc:
+        # No key, service busy, quota used up or no internet: give the
+        # farmer the built-in summary instead of an error
+        log.warning("AI explanation unavailable, using offline summary: %s", exc)
+        return {"text": offline_explanation(result, crop_index, language), "provider": "offline", "offline": True}
+    return {"text": text, "provider": PROVIDER_NAMES[provider], "offline": False}
 
 
 def _pick_provider() -> str:
@@ -159,7 +172,12 @@ def _ask_gemini(prompt: str) -> str:
     # Free-tier models are often busy (503) or slow (504): fall back to the
     # fast lite model, retrying it once before giving up
     attempts = [GEMINI_MODEL, GEMINI_FALLBACK_MODEL, GEMINI_FALLBACK_MODEL]
+    started = time.monotonic()
     for i, model in enumerate(attempts):
+        # Stay well inside the web server's 120 s request timeout; the
+        # caller then shows the offline summary instead
+        if i > 0 and time.monotonic() - started > GEMINI_BUDGET_S:
+            raise ExplainError("Gemini is too slow right now")
         try:
             response = client.models.generate_content(
                 model=model,
@@ -179,6 +197,11 @@ def _ask_gemini(prompt: str) -> str:
             if i == len(attempts) - 1:
                 raise ExplainError("Gemini is busy right now - please try again in a minute") from exc
             time.sleep(2)
+        except genai_errors.APIError as exc:
+            raise ExplainError(f"Gemini service error ({exc.code})") from exc
+        except OSError as exc:
+            # Network failures (no internet, DNS, connection reset)
+            raise ExplainError(f"Could not reach Gemini: {exc}") from exc
 
     if not response.text:
         raise ExplainError("The explanation could not be generated for this report")

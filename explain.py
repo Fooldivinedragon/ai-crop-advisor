@@ -28,11 +28,12 @@ from google.genai import types as genai_types
 from offline_explain import offline_explanation
 
 MODEL = "claude-opus-5-5"
-# gemini-3.6-flash: good Hindi in ~15 s on the free tier (3.8-flash took 40+ s)
+# gemini-3.6-flash: good Hindi in ~15 s on the free tier (3.8-flash took 40+ s).
+# A slow answer is cut off after 25 s and the fast lite model is tried instead.
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 GEMINI_FALLBACK_MODEL = "gemini-3.5-flash-lite"
-GEMINI_TIMEOUT_MS = 40_000
-GEMINI_BUDGET_S = 50
+GEMINI_TIMEOUT_MS = 25_000
+GEMINI_BUDGET_S = 30
 PROVIDER_NAMES = {"claude": "Claude", "gemini": "Gemini"}
 
 log = logging.getLogger(__name__)
